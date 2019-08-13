@@ -5,14 +5,12 @@ public class Piece
 {
     private GL2 m_GL2;
     private GLUT m_Glut;
-    private int [] m_PieceLimit;
     private int m_PieceRotate;
     
     public Piece(GL2 _openGL2, String _pieceType)
     {
         m_GL2 = _openGL2;
         m_Glut = new GLUT();
-        m_PieceLimit = new int[2];
         m_PieceRotate = 0;
     }
     
@@ -875,48 +873,5 @@ public class Piece
         pos[1] = 45 - _posY * 5;
         
         return pos;
-    }
-    
-    public int[] GetPieceLimit(String _CurrentPiece)
-    {
-        switch(_CurrentPiece)
-        {
-            case "Block":
-                m_PieceLimit[0] = 1; //Right
-                m_PieceLimit[1] = 1; //Left
-                return m_PieceLimit;
-            case "Quad":
-                m_PieceLimit[0] = 2;
-                m_PieceLimit[1] = 1;
-                return m_PieceLimit;
-            case "Zl":
-                m_PieceLimit[0] = 2;
-                m_PieceLimit[1] = 2;
-                return m_PieceLimit;
-            case "Zr":
-                m_PieceLimit[0] = 3;
-                m_PieceLimit[1] = 1;
-                return m_PieceLimit;
-            case "Tower":
-                m_PieceLimit[0] = 1;
-                m_PieceLimit[1] = 1;
-                return m_PieceLimit;
-            case "T":
-                m_PieceLimit[0] = 2;
-                m_PieceLimit[1] = 2;
-                return m_PieceLimit;
-            case "Pl":
-                m_PieceLimit[0] = 1;
-                m_PieceLimit[1] = 2;
-                return m_PieceLimit;
-            case "Pr":
-                m_PieceLimit[0] = 2;
-                m_PieceLimit[1] = 1;
-                return m_PieceLimit;
-            default:
-                m_PieceLimit[0] = 0;
-                m_PieceLimit[1] = 0;
-                return m_PieceLimit;
-        }
     }
 }
