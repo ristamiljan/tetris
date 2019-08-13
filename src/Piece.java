@@ -816,7 +816,7 @@ public class Piece
         }
     }
     
-    /*Oboji u zavisnosti od elementa u odredjenu boju*/
+    /*Draw piece in board in color that present that type of piece*/
     public void DrawPieceInBoard(int[][] _board)
     {
         for(int x = 0; x < _board.length; x++)
@@ -854,7 +854,7 @@ public class Piece
         }
     }
     
-    /*Oboji kvadratic u odredjenu boju*/
+    /*Draw cube in specified color*/
     private void AddPieceInBoard(int _posX, int _posY, float _R, float _G, float _B)
     {
         m_GL2.glPushMatrix();
@@ -864,7 +864,7 @@ public class Piece
         m_GL2.glPopMatrix();
     }
     
-    /*Pozicija gde treba da se nacrta kvadratic*/
+    /*Returns the position where cube should be drawn*/
     private int[] GetBoardPos(int _posX, int _posY)
     {
         int pos [] = new int[2];

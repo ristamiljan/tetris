@@ -21,7 +21,7 @@ public class Render
         m_Windows.setResizable(true);
         
         
-        Game m_GameScreen = new Game();  //klasa za prikaz menija/igre/uputsva
+        Game m_GameScreen = new Game();  //Class for showing menu/game/how to play
         m_Windows.addGLEventListener(m_GameScreen); 
         m_Windows.addKeyListener(m_GameScreen);
 

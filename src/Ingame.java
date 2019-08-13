@@ -6,10 +6,10 @@ public class Ingame
     private GL2 m_GL2;
     private int m_Points;
     private int m_HighScore;
-    private int m_Grid [][]; //matrica
-    private int m_MatrixPosX; //pozicije u matrici
+    private int m_Grid [][]; //board matrix
+    private int m_MatrixPosX; //x value in matrix
     private int m_MatrixPosY;
-    private int m_PosX; //pozicije u koordinatnom sistemu
+    private int m_PosX; //x coordinate
     private int m_PosY;
     private String m_NextPiece;
     private String m_CurrentPiece;
@@ -55,7 +55,7 @@ public class Ingame
         CreateBoard();
     }
     
-    /*Iscrtava potrebne okvire*/
+    /*Draw frames around board and next peace*/
     public void CreateScene()
     {
         m_GL2.glLineWidth(10.0f);
@@ -93,19 +93,17 @@ public class Ingame
         m_GL2.glEnd();  
     }
     
-    /*Vraca trenutni high score*/
     public int GetHighScore()
     {
         return m_HighScore;
     }
     
-    /*Vraca trenutni broj osvojenih poena*/
     public int GetPoints()
     {
         return m_Points;
     }
     
-    /*Pomeri na levo ako je moguce*/
+    /*Moves piece left if it's possible*/
     public void MoveLeft()
     {
         if(m_MoveLeft)
@@ -116,7 +114,7 @@ public class Ingame
         }
     }
     
-    /*Pomeri na desno ako je moguce*/
+    /*Moves piece right if it's possible*/
     public void MoveRight()
     {
         if(m_MoveRight)
@@ -127,13 +125,11 @@ public class Ingame
         }
     }
     
-    /*Spusta polako figuru*/
     public void NormalDropPiece()
     {
         m_FastDropPiece = false;
     }
     
-    /*Brzo spusta figuru*/
     public void FastDropPiece()
     {
         m_FastDropPiece = true;
@@ -150,7 +146,7 @@ public class Ingame
         }
     }   
     
-    /*Proverava da li moze da pomeri u tom pravcu figuru*/
+    /*Checks if piece can be moved left/right*/
     private void Move()
     {
         m_MoveLeft = true;
@@ -666,7 +662,7 @@ public class Ingame
         }
     }
     
-    /*Prilikom rotiranja figure potrebno je setovati poziciju na x osi u slucaju kada je blizu ivice*/
+    /*When piece is rotated, x coordinate needs to be tuned up if it's close to the edges*/
     public void RotatePiece()
     {
         m_Piece.Rotate();
@@ -909,7 +905,7 @@ public class Ingame
         }
     }
   
-    /*Da li smo dosli do leve ili desne ivice (ako jesmo u tom pravcu ne moze da se pomera)*/
+    /*Returns false if we are on the edge, and true if we are not touching that edge*/
     private boolean IsStageLimit(String _direction)
     {
         boolean temp = false;
@@ -1164,15 +1160,15 @@ public class Ingame
         return temp;
     }
     
-    /*jedna iteracija*/
+    /*One iteration*/
     private void DropPiece()
     {
-        MakePoints(); //proveri red
-        UpdatePiece(); //spusti na dole element
-        UpdateNextPiece(); //nacrta sledeci element u okviru
+        MakePoints(); //Check if there are full rows
+        UpdatePiece(); //Move piece down
+        UpdateNextPiece(); //Draws next piece in frame
     }
     
-    /* Spusta na dole element*/
+    /* Moves piece down*/
     private void UpdatePiece()
     {
         m_Piece.DropPiece(m_PosX, m_PosY, m_CurrentPiece);
@@ -1204,13 +1200,13 @@ public class Ingame
         }
     }
     
-    /* Nacrta u okviru sledeci element*/
+    /* Draws next piece in frame*/
     private void UpdateNextPiece()
     {
         m_Piece.DropPiece(72, 60, m_NextPiece, true);
     }
     
-    /* Proverava da li moze da se spusti na dole figura, ako ne moze stvara novu (resetuje sve vezano za figuru)*/
+    /* Calls function for currentPiece which moves down piece if it can or resets values and starts with next piece*/
     private void CheckBoard()
     {
         switch(m_CurrentPiece)
@@ -1242,11 +1238,11 @@ public class Ingame
         }
     }
     
-    /*Proverava da li postoji ispod neka figura*/
+    /*Checks if there is another piece on potential positions*/
     private boolean CheckPieceBellow(int _amountPieceToCheck, int[] _positions)
     {
-        int x = 0; //svaki drugi u nizu je x
-        int y = 1;
+        int x = 0; 
+        int y = 1; //odds are y coordinates
         
         for(int i = 0; i < _amountPieceToCheck; i++)
         {
@@ -1262,12 +1258,12 @@ public class Ingame
         return false;
     }
     
-    /*Prestaje da spusta quad i prelazi na novu figuru ako dodje do dna ili su ispod zauzeta polja*/
+    /*Tries to put down quad if it comes to the bottom or if it gets near to taken positions*/
     private void QuadPlace()
     {
         int [] positionsToCheck = {m_MatrixPosX, m_MatrixPosY, m_MatrixPosX + 1, m_MatrixPosY};
         
-        if(m_MatrixPosY == (m_Grid[m_MatrixPosX].length - 1)) //ako dodje do dna
+        if(m_MatrixPosY == (m_Grid[m_MatrixPosX].length - 1)) //bottom
         {
             m_Grid[m_MatrixPosX][m_MatrixPosY] = 1;
             m_Grid[m_MatrixPosX+1][m_MatrixPosY] = 1;
@@ -1275,7 +1271,7 @@ public class Ingame
             m_Grid[m_MatrixPosX+1][m_MatrixPosY-1] = 1;
             ResetValues();  
         }
-        else if(CheckPieceBellow(2, positionsToCheck) && m_MatrixPosY < 19 && m_MatrixPosY > 0) //ako su ispod zauzeta polja
+        else if(CheckPieceBellow(2, positionsToCheck) && m_MatrixPosY < 19 && m_MatrixPosY > 0) //taken
         {
             m_Grid[m_MatrixPosX][m_MatrixPosY] = 1;
             m_Grid[m_MatrixPosX+1][m_MatrixPosY] = 1;
@@ -1705,7 +1701,7 @@ public class Ingame
         }
     }
     
-    /* Proverava svaku liniju u matrici i ako je prazna ocisti je(vrati na 0) a onda taj red sa nulama ispliva na vrhu*/
+    /* Checks every row and if it's full, clears it(returns to 0 and add points), and then that row bubbles up*/
     private void MakePoints()
     {
         for(int y = 0; y < m_Grid[0].length; y++)
@@ -1740,7 +1736,7 @@ public class Ingame
         }
     }
     
-    /*Resetuje vrednosti pre nego se baci nova figura*/
+    /*Reset values before throwing new piece*/
     private void ResetValues()
     {
         m_Piece.RestartRotate();
@@ -1752,7 +1748,7 @@ public class Ingame
         m_NextPiece = NextPiece(); 
     }
     
-    /*Proverava da li je igra gotova*/
+    /*Checks if the game is over*/
     public boolean IsGameOver()
     {
     	if(m_Points > m_HighScore) {
@@ -1811,7 +1807,7 @@ public class Ingame
             return false;
     }
     
-    /* Vraca ime sledece figure*/
+    /* Returns the name of next piece*/
     private String NextPiece()
     {
         Random piece = new Random();
@@ -1839,7 +1835,7 @@ public class Ingame
         }
     }
     
-    /* Pravi tablu za novu igru*/
+    /* Makes table for new game*/
     private void CreateBoard()
     {
         for(int x = 0; x < m_Grid.length; x++)
