@@ -97,6 +97,8 @@ public class Game implements GLEventListener, KeyListener
         m_Menu.CreateText(-50, -15, "2. Complete a line with piece to give 100 points", Color.white, 7);
         m_Menu.CreateText(-50, -20, "3. After complete a line with pieces, this line will be removed", Color.white, 7);
         m_Menu.CreateText(-50, -25, "4. If you place a piece in the out top, you lose", Color.white, 7);
+        m_Menu.CreateText(-50, -30, "5. If you're in game and press r, new game starts", Color.white, 7);
+        m_Menu.CreateText(-50, -35, "6. If you're in game and press backspace, you go back in menu", Color.white, 7);
         m_Menu.CreateText(-15, -60, "Back", Color.white, 8);
         m_Menu.SelectPoint(m_Selection);
     }
@@ -140,6 +142,13 @@ public class Game implements GLEventListener, KeyListener
             case KeyEvent.VK_RIGHT:
                 KeyRight();
                 break;
+            case KeyEvent.VK_BACK_SPACE:
+            	m_Ingame = false;
+            	break;
+            case KeyEvent.VK_R:
+            	if(m_Ingame == true)
+                    m_Game.NewGame();
+            	break;
         }
     }
     
