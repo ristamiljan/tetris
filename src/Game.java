@@ -3,6 +3,8 @@ import com.jogamp.newt.event.KeyListener;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
+import com.jogamp.opengl.util.FPSAnimator;
+
 import java.awt.Color;
 
 public class Game implements GLEventListener, KeyListener
@@ -13,6 +15,12 @@ public class Game implements GLEventListener, KeyListener
     private Menu m_Menu;
     private Ingame m_Game;
     private int m_Selection;
+    private FPSAnimator animator;
+    
+    public void setAnimator(FPSAnimator a) 
+    {
+    	animator = a;
+    }
     
     @Override
     public void init(GLAutoDrawable _drawable) 
@@ -109,6 +117,7 @@ public class Game implements GLEventListener, KeyListener
         switch(_event.getKeyCode())
         {
             case KeyEvent.VK_ESCAPE:
+            	animator.stop();
                 System.exit(0);
                 break;
                 
@@ -148,6 +157,7 @@ public class Game implements GLEventListener, KeyListener
                     m_HowToPlay = !m_HowToPlay;
                     break;
                 case 3:
+                	animator.stop();
                     System.exit(0);
                     break;
             }

@@ -28,6 +28,7 @@ public class Render
         
         FPSAnimator animator = new FPSAnimator(m_Windows, 60);
         animator.start();
+        m_GameScreen.setAnimator(animator);
         
         m_Windows.addWindowListener(new WindowAdapter() 
         {
