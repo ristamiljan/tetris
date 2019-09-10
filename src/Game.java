@@ -87,6 +87,11 @@ public class Game implements GLEventListener, KeyListener
             m_Menu.CreateText(35, -20, "GAME OVER", Color.red, 8);
             m_Menu.CreateText(35, -25, "Press ENTER to return to Main Menu", Color.white, 7);
         }
+        
+        if(m_Game.isPaused()) 
+        {
+        	m_Menu.CreateText(35, -20, "GAME PAUSED", Color.yellow, 8);
+        }
     }
     
     public void HowToPlay()
@@ -99,6 +104,7 @@ public class Game implements GLEventListener, KeyListener
         m_Menu.CreateText(-50, -25, "4. If you place a piece in the out top, you lose", Color.white, 7);
         m_Menu.CreateText(-50, -30, "5. If you're in game and press r, new game starts", Color.white, 7);
         m_Menu.CreateText(-50, -35, "6. If you're in game and press backspace, you go back in menu", Color.white, 7);
+        m_Menu.CreateText(-50, -40, "7. If you're in game and press p, game will be paused", Color.white, 7);
         m_Menu.CreateText(-15, -60, "Back", Color.white, 8);
         m_Menu.SelectPoint(m_Selection);
     }
@@ -146,8 +152,12 @@ public class Game implements GLEventListener, KeyListener
             	m_Ingame = false;
             	break;
             case KeyEvent.VK_R:
-            	if(m_Ingame == true)
+            	if(m_Ingame)
                     m_Game.NewGame();
+            	break;
+            case KeyEvent.VK_P:
+            	if(m_Ingame  && !m_Game.IsGameOver())
+            		m_Game.changePaused();
             	break;
         }
     }
@@ -204,7 +214,7 @@ public class Game implements GLEventListener, KeyListener
         if(m_Selection > 1 && !m_Ingame)
             m_Selection--;
         
-        if(m_Ingame && !m_Game.IsGameOver())
+        if(m_Ingame && !m_Game.IsGameOver() && !m_Game.isPaused())
             m_Game.RotatePiece();
     }
     

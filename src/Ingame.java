@@ -19,6 +19,7 @@ public class Ingame
     private boolean m_FastDropPiece;
     private boolean m_MoveRight;
     private boolean m_MoveLeft;
+    private boolean m_paused;
     
     
     public Ingame(GL2 _openGL2)
@@ -37,6 +38,7 @@ public class Ingame
         m_UpdateTimer = 0;
         m_PieceSpeed = 10f;
         m_FastDropPiece = false;
+        m_paused = false;
         
         CreateBoard();
     }
@@ -51,8 +53,19 @@ public class Ingame
         m_CurrentPiece = NextPiece();
         m_NextPiece = NextPiece();
         m_UpdateTimer = 0;
+        m_paused = false;
         
         CreateBoard();
+    }
+    
+    public void changePaused() 
+    {
+    	m_paused = !m_paused;
+    }
+    
+    public boolean isPaused() 
+    {
+    	return m_paused;
     }
     
     /*Draw frames around board and next peace*/
@@ -106,6 +119,8 @@ public class Ingame
     /*Moves piece left if it's possible*/
     public void MoveLeft()
     {
+    	if(m_paused) return;
+    	
         if(m_MoveLeft)
         {
             m_MatrixPosX--;
@@ -117,6 +132,8 @@ public class Ingame
     /*Moves piece right if it's possible*/
     public void MoveRight()
     {
+    	if(m_paused) return;
+    	
         if(m_MoveRight)
         {
             m_MatrixPosX++;
@@ -1172,6 +1189,9 @@ public class Ingame
     private void UpdatePiece()
     {
         m_Piece.DropPiece(m_PosX, m_PosY, m_CurrentPiece);
+        
+        if(m_paused) return;
+        
         m_UpdateTimer += 0.1f;
         
         if(!m_FastDropPiece)
